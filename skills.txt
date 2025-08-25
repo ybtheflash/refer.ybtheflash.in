@@ -23,3 +23,7 @@ RestAPI
 SQL
 Agile
 Maven
+Rest Assured
+Jenkins
+CI/CD
+Docker

@@ -11,23 +11,33 @@ import { FaEnvelope, FaWhatsapp, FaGithub, FaLinkedin } from "react-icons/fa";
 import { ModeToggle } from "./ModeToggle";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { Button as MovingBorderButton } from "@/components/ui/moving-border";
+import IWasHereWidget from "@/components/IWasHereWidget";
 
 export default function ReferralPage({ skills }: { skills: string[] }) {
+  // Compute age from birthdate: June 28, 2002
+  const birthDate = new Date(2002, 5, 28); // JS months are 0-based; 5 = June
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
   return (
     <main className="min-h-screen bg-background text-foreground font-sans flex flex-col items-center justify-center p-4 transition-colors">
       <ValorantPopup />
-      <div className="relative w-full max-w-3xl mb-8">
-        <div className="absolute inset-0 -z-10 rounded-xl overflow-hidden">
-          <div className="block dark:hidden h-full w-full opacity-50">
-            <FlickeringGrid className="h-full w-full" color="rgb(0,0,0)" maxOpacity={0.06} />
+  <div className="relative w-full max-w-3xl mb-6">
+        {/* Local background just behind the card */}
+        <div className="absolute -inset-3 sm:-inset-4 -z-10 rounded-2xl overflow-hidden">
+          <div className="block dark:hidden h-full w-full opacity-60">
+            <FlickeringGrid className="h-full w-full" color="rgb(0,0,0)" maxOpacity={0.08} />
           </div>
-          <div className="hidden dark:block h-full w-full opacity-40">
-            <FlickeringGrid className="h-full w-full" color="rgb(255,255,255)" maxOpacity={0.08} />
+          <div className="hidden dark:block h-full w-full opacity-50">
+            <FlickeringGrid className="h-full w-full" color="rgb(255,255,255)" maxOpacity={0.12} />
           </div>
         </div>
         <Card className="w-full p-6 sm:p-8 border border-muted shadow-lg bg-card">
         {/* Hero */}
-        <div className="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6 w-full">
+  <div className="flex items-center gap-4 sm:gap-6 mb-3 sm:mb-4 w-full">
           <Avatar className="border border-muted shadow-sm w-16 h-16 sm:w-20 sm:h-20 overflow-hidden">
             <img src="/me.jpg" alt="Yubaraj Biswas" className="object-cover w-full h-full" />
           </Avatar>
@@ -36,43 +46,69 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
               Looking for <span className="font-semibold text-primary">SDE I</span> or <span className="font-semibold text-primary">QEA</span> role — entry level, just graduated as a fresher.
             </p>
             <h1 className="mt-1 text-3xl sm:text-4xl font-extrabold tracking-tight">Yubaraj Biswas</h1>
+            <div className="mt-1 text-xs text-muted-foreground">Kolkata, India • He/Him • {age}</div>
           </div>
         </div>
         {/* Prominent Resume button below bio with moving border */}
-        <div className="mb-4 flex justify-start">
+  <div className="mb-3 flex justify-start">
           <MovingBorderButton
             as="a"
             href="/YUBARAJ_BISWAS_2025.pdf"
             target="_blank"
             rel="noopener noreferrer"
             duration={3000}
-            containerClassName="h-10 w-auto"
-            className="px-4 py-2 text-sm font-semibold border border-foreground bg-background text-foreground dark:border-slate-800 dark:bg-slate-900/80 dark:text-white"
-            borderClassName="bg-[radial-gradient(currentColor_40%,transparent_60%)]"
+            containerClassName="h-11 w-auto"
+            className="px-4 py-2 text-sm font-semibold border border-foreground bg-foreground text-background"
+            borderClassName="text-foreground/70 dark:text-foreground/60"
           >
             View Resume (PDF)
           </MovingBorderButton>
         </div>
-        <Separator className="my-4 sm:my-6 bg-muted" />
-        {/* Education */}
-        <section className="mb-4 sm:mb-6">
-          <h2 className="text-xl font-semibold mb-2">Education</h2>
-          <div className="text-sm sm:text-base text-muted-foreground">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-              <div>
-                <span className="font-medium text-foreground">B P Poddar Institute Of Management and Technology</span>
-                <span className="ml-2 text-xs sm:text-sm text-muted-foreground">[Tier II] • Kolkata, WB, India</span>
+  <Separator className="my-3 sm:my-4 bg-muted" />
+        {/* Education & Work */}
+  <section className="mb-3 sm:mb-4">
+          <h2 className="text-xl font-semibold mb-2">Quick Overview</h2>
+          <div className="space-y-3">
+            {/* Education subsection */}
+            <div>
+              <h3 className="text-base font-medium mb-1 text-muted-foreground">Highest Education</h3>
+              <div className="text-sm sm:text-base text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                  <div>
+                    <span className="font-medium text-foreground">B P Poddar Institute Of Management and Technology</span>
+                    <span className="ml-2 text-xs sm:text-sm text-muted-foreground">[Tier II] • Kolkata, WB, India</span>
+                  </div>
+                  <a href="https://bppimt.ac.in" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-muted hover:bg-muted transition-colors" aria-label="bppimt.ac.in">
+                    ↗
+                  </a>
+                </div>
+                <div className="mt-1">B.Tech in Computer Science and Engineering (2021 – 2025) • CGPA: 7.42</div>
+                <div className="text-xs sm:text-sm">Affiliated to Maulana Abul Kalam Azad University of Technology, West Bengal</div>
               </div>
-              <a href="https://bppimt.ac.in" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-muted hover:bg-muted transition-colors" aria-label="bppimt.ac.in">
-                ↗
-              </a>
             </div>
-            <div className="mt-1">B.Tech in Computer Science and Engineering (2021 – 2025) • CGPA: 7.42</div>
-            <div className="text-xs sm:text-sm">Affiliated to Maulana Abul Kalam Azad University of Technology, West Bengal</div>
+
+            <Separator className="bg-muted" />
+
+            {/* Work subsection */}
+            <div>
+              <h3 className="text-base font-medium mb-1 text-muted-foreground">Latest Work Experience</h3>
+              <div className="text-sm sm:text-base text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                  <span className="font-medium text-foreground">PROGRAMMER ANALYST INTERN | COGNIZANT</span>
+                  <span className="text-xs sm:text-sm">May 2025 – August 2025</span>
+                </div>
+                <div className="text-xs sm:text-sm mt-0.5">Remote, Chennai, India</div>
+                <p className="mt-2 leading-relaxed">
+                  Focused on technical upskilling through hands-on coding, project work, webinars, and milestone-based
+                  evaluations; prepared with Agile and Testing skill set for QEA while adapting to dynamic skill tracks and
+                  collaborating with industry mentors to align learning with real-world business needs.
+                </p>
+              </div>
+            </div>
           </div>
-  </section>
-  <Separator className="my-4 sm:my-6 bg-muted" />
-        <div className="mb-6">
+        </section>
+  <Separator className="my-3 sm:my-4 bg-muted" />
+        <div className="mb-4">
           <h2 className="text-xl font-semibold mb-2">Skills</h2>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill, idx) => (
@@ -80,8 +116,8 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
             ))}
           </div>
         </div>
-        <Separator className="my-6 bg-muted" />
-        <div className="mb-2">
+  <Separator className="my-4 bg-muted" />
+  <div className="mb-2">
           <h2 className="text-xl font-semibold mb-2">Contact Info</h2>
           <div className="flex flex-col gap-3">
             <a href="mailto:yubarajbiswas34@gmail.com" className="flex items-center gap-2 text-base font-medium hover:text-fuchsia-400 transition-colors group">
@@ -102,8 +138,8 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
             </a>
           </div>
         </div>
-        <Separator className="my-6 bg-muted" />
-        <div className="flex items-center justify-center gap-3">
+  <Separator className="my-4 bg-muted" />
+        <div className="flex items-center justify-center gap-3 flex-wrap">
           <ModeToggle />
           <Button asChild variant="outline" size="icon" className="hover:scale-105 transition-transform" title="Visit ybtheflash.in">
             <a href="https://ybtheflash.in" target="_blank" rel="noopener noreferrer" aria-label="ybtheflash.in">
@@ -115,6 +151,7 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
               </svg>
             </a>
           </Button>
+          <IWasHereWidget />
         </div>
         </Card>
       </div>
