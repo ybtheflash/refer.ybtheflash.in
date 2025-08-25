@@ -6,12 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import ValorantPopup from "@/components/ValorantPopup";
-import { FaEnvelope, FaWhatsapp, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaEnvelope, FaWhatsapp, FaGithub, FaLinkedin, FaYoutube, FaHandshake } from "react-icons/fa";
 
 import { ModeToggle } from "./ModeToggle";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { Button as MovingBorderButton } from "@/components/ui/moving-border";
 import IWasHereWidget from "@/components/IWasHereWidget";
+import PolicyDialog from "@/components/PolicyDialog";
 
 export default function ReferralPage({ skills }: { skills: string[] }) {
   // Compute age from birthdate: June 28, 2002
@@ -117,8 +118,10 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
           </div>
         </div>
   <Separator className="my-4 bg-muted" />
-  <div className="mb-2">
-          <h2 className="text-xl font-semibold mb-2">Contact Info</h2>
+        <div className="mb-2">
+          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+            Connections 🤝🏻
+          </h2>
           <div className="flex flex-col gap-3">
             <a href="mailto:yubarajbiswas34@gmail.com" className="flex items-center gap-2 text-base font-medium hover:text-fuchsia-400 transition-colors group">
               <FaEnvelope className="text-xl group-hover:scale-110 group-hover:text-fuchsia-400 transition-transform" />
@@ -136,6 +139,10 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
               <FaGithub className="text-xl group-hover:scale-110 group-hover:text-gray-900 dark:group-hover:text-white transition-transform" />
               GitHub
             </a>
+            <a href="https://www.youtube.com/@ybtheflash" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-base font-medium hover:text-red-600 transition-colors group">
+              <FaYoutube className="text-xl group-hover:scale-110 group-hover:text-red-600 transition-transform" />
+              YouTube
+            </a>
           </div>
         </div>
   <Separator className="my-4 bg-muted" />
@@ -152,6 +159,7 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
             </a>
           </Button>
           <IWasHereWidget />
+          <PolicyDialog />
         </div>
         </Card>
       </div>
