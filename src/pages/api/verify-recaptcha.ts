@@ -11,10 +11,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const secret = process.env.RECAPTCHA_SECRET_KEY;
-    const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`;
+    const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
 
     try {
-        const response = await fetch(verifyUrl, { method: "POST" });
+        const response = await fetch(verifyUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ secret: String(secret), response: String(token) }),
+        });
         const data = await response.json();
         if (data.success && data.score > 0.5) {
             return res.status(200).json({ success: true, score: data.score });

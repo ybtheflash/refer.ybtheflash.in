@@ -12,10 +12,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const prompt = `You are a strict profanity checker. Reply ONLY with YES or NO. Is the following text profane, offensive, harassing, or inappropriate?\n\nTEXT:\n"${text.slice(0, 1000)}"`;
 
     try {
-        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
             {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
                 body: JSON.stringify({
                     contents: [{ role: "user", parts: [{ text: prompt }] }],
                     generationConfig: { temperature: 0 },

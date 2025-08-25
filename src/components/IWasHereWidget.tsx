@@ -45,29 +45,35 @@ export default function IWasHereWidget() {
   const { isLoading: vLoading, data: vData } = db ? (db as any).useQuery(vQuery) : ({ isLoading: false, data: { visitors: [] } } as any);
   const visitCount = (vData?.visitors?.[0]?.count as number) ?? 0;
 
-  // Increment unique visit once per browser via localStorage
+  // Increment unique visit using server-provided iphash
   React.useEffect(() => {
     if (!db) return;
     if (vLoading) return;
     if (hasIncrementedRef.current) return;
-    try {
-      const key = "viz_visited_v1";
-      const already = typeof window !== "undefined" && window.localStorage.getItem(key) === "1";
-      if (!already) {
-        window.localStorage.setItem(key, "1");
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/visit");
+        if (!r.ok) throw new Error("visit api failed");
+        const { iphash } = await r.json();
+        if (cancelled) return;
+        // Check if this hash exists in InstantDB (namespace: visitors_seen, id = iphash)
+        const seenQuery = { visitors_seen: { $: { where: { id: iphash } } } } as any;
+        const { data: seenData } = await (db as any).queryOnce(seenQuery);
+        const already = (seenData?.visitors_seen?.length ?? 0) > 0;
+        if (!already) {
+          // Mark hash as seen and increment counter
+          await (db as any).transact([
+            (db as any).tx.visitors_seen[iphash].update({ createdAt: Date.now() }),
+            (db as any).tx.visitors["global"].update({ count: (visitCount || 0) + 1, updatedAt: Date.now() }),
+          ]);
+        }
         hasIncrementedRef.current = true;
-        (db as any).transact(
-          (db as any).tx.visitors["global"].update({
-            count: (visitCount || 0) + 1,
-            updatedAt: Date.now(),
-          })
-        );
-      } else {
-        hasIncrementedRef.current = true;
+      } catch (_) {
+        hasIncrementedRef.current = true; // avoid loops
       }
-    } catch (_) {
-      // ignore
-    }
+    })();
+    return () => { cancelled = true; };
   }, [vLoading, visitCount]);
 
   const onSubmit = async (e: React.FormEvent) => {

@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 
-// Read site key from Next.js public env
-const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || process.env.RECAPTCHA_SITE_KEY;
+// Read site key from Next.js public env (never fall back to secret on client)
+const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string | undefined;
 
 export default function RecaptchaV3() {
   const [token, setToken] = useState<string | null>(null);
