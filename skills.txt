@@ -1,0 +1,25 @@
+Linux
+Apache
+MySQL
+PHP
+MongoDB
+ExpressJs
+React
+NodeJS
+TypeScript
+Firebase
+Appwrite
+GenAI
+NextJS
+Tailwind
+Bash
+Git
+Python
+Java
+JavaScript
+React Native
+Selenium
+RestAPI
+SQL
+Agile
+Maven

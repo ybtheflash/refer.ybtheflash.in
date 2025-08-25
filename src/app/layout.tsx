@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +25,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="relative min-h-screen">
+            <div className="fixed inset-0 -z-10">
+              <div className="block dark:hidden h-full w-full">
+                <FlickeringGrid className="h-full w-full opacity-30" color="rgb(0,0,0)" maxOpacity={0.06} />
+              </div>
+              <div className="hidden dark:block h-full w-full">
+                <FlickeringGrid className="h-full w-full opacity-30" color="rgb(255,255,255)" maxOpacity={0.08} />
+              </div>
+            </div>
+            <div className="relative">{children}</div>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
