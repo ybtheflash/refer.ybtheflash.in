@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# one-off initializers (not for prod)
+src/app/seed/
+scripts/seed.mjs

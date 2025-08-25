@@ -38,7 +38,7 @@ export default function IWasHereWidget() {
   const vQuery = React.useMemo(() => ({
     visitors: {
       $: {
-        where: { id: "global" },
+        where: { key: "global" },
       },
     },
   }), []);
@@ -57,15 +57,22 @@ export default function IWasHereWidget() {
         if (!r.ok) throw new Error("visit api failed");
         const { iphash } = await r.json();
         if (cancelled) return;
-        // Check if this hash exists in InstantDB (namespace: visitors_seen, id = iphash)
-        const seenQuery = { visitors_seen: { $: { where: { id: iphash } } } } as any;
+    // Check if this hash exists in InstantDB (namespace: visitors_seen, hash field equals iphash)
+    const seenQuery = { visitors_seen: { $: { where: { hash: iphash } } } } as any;
         const { data: seenData } = await (db as any).queryOnce(seenQuery);
         const already = (seenData?.visitors_seen?.length ?? 0) > 0;
         if (!already) {
-          // Mark hash as seen and increment counter
+          // Resolve the current visitors/global id (create if absent), then increment its count
+          const { data: vNow } = await (db as any).queryOnce({ visitors: { $: { where: { key: "global" } } } });
+          const vRec = vNow?.visitors?.[0];
+          const vId = vRec?.id || (await (async () => {
+            const newId = id();
+            await (db as any).transact((db as any).tx.visitors[newId].update({ key: "global", count: 0, updatedAt: Date.now() }));
+            return newId;
+          })());
           await (db as any).transact([
-            (db as any).tx.visitors_seen[iphash].update({ createdAt: Date.now() }),
-            (db as any).tx.visitors["global"].update({ count: (visitCount || 0) + 1, updatedAt: Date.now() }),
+            (db as any).tx.visitors_seen[id()].update({ hash: iphash, createdAt: Date.now() }),
+            (db as any).tx.visitors[vId].update({ count: (visitCount || 0) + 1, updatedAt: Date.now() }),
           ]);
         }
         hasIncrementedRef.current = true;
