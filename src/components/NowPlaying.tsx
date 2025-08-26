@@ -61,7 +61,7 @@ export default function NowPlaying() {
           <div className="flex items-center gap-3 bg-card/80 backdrop-blur px-3 py-2 text-sm rounded-md">
             {data.albumImageUrl ? (
               <img
-                src={data.albumImageUrl}
+                src={`/api/spotify/image-proxy?url=${encodeURIComponent(data.albumImageUrl)}`}
                 alt="Album"
                 className="h-8 w-8 rounded object-cover"
                 loading="lazy"
