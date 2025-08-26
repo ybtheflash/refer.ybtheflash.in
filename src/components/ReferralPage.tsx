@@ -12,6 +12,7 @@ import { ModeToggle } from "./ModeToggle";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { Button as MovingBorderButton } from "@/components/ui/moving-border";
 import IWasHereWidget from "@/components/IWasHereWidget";
+import NowPlaying from "@/components/NowPlaying";
 import PolicyDialog from "@/components/PolicyDialog";
 
 export default function ReferralPage({ skills }: { skills: string[] }) {
@@ -25,17 +26,19 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
   }
   return (
     <main className="min-h-screen bg-background text-foreground font-sans flex flex-col items-center justify-center p-4 transition-colors">
+      {/* Full-viewport background */}
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <div className="block dark:hidden h-full w-full opacity-60">
+          <FlickeringGrid className="h-full w-full" color="rgb(0,0,0)" squareSize={5} maxOpacity={0.06} />
+        </div>
+        <div className="hidden dark:block h-full w-full opacity-50">
+          <FlickeringGrid className="h-full w-full" color="rgb(255,255,255)" squareSize={5} maxOpacity={0.10} />
+        </div>
+      </div>
+      {/* Foreground content */}
+      <div className="relative z-10 w-full flex flex-col items-center">
       <ValorantPopup />
   <div className="relative w-full max-w-3xl mb-6">
-        {/* Local background just behind the card */}
-        <div className="absolute -inset-3 sm:-inset-4 -z-10 rounded-2xl overflow-hidden">
-          <div className="block dark:hidden h-full w-full opacity-60">
-            <FlickeringGrid className="h-full w-full" color="rgb(0,0,0)" maxOpacity={0.08} />
-          </div>
-          <div className="hidden dark:block h-full w-full opacity-50">
-            <FlickeringGrid className="h-full w-full" color="rgb(255,255,255)" maxOpacity={0.12} />
-          </div>
-        </div>
         <Card className="w-full p-6 sm:p-8 border border-muted shadow-lg bg-card">
         {/* Hero */}
   <div className="flex items-center gap-4 sm:gap-6 mb-3 sm:mb-4 w-full">
@@ -135,8 +138,8 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
               <FaLinkedin className="text-xl group-hover:scale-110 group-hover:text-blue-600 transition-transform" />
               LinkedIn
             </a>
-            <a href="https://github.com/ybtheflash" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-base font-medium hover:text-gray-900 dark:hover:text-white transition-colors group">
-              <FaGithub className="text-xl group-hover:scale-110 group-hover:text-gray-900 dark:group-hover:text-white transition-transform" />
+            <a href="https://github.com/ybtheflash" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-base font-medium hover:text-amber-600 dark:hover:text-amber-400 transition-colors group">
+              <FaGithub className="text-xl group-hover:scale-110 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-transform" />
               GitHub
             </a>
             <a href="https://www.youtube.com/@ybtheflash" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-base font-medium hover:text-red-600 transition-colors group">
@@ -145,23 +148,36 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
             </a>
           </div>
         </div>
-  <Separator className="my-4 bg-muted" />
-        <div className="flex items-center justify-center gap-3 flex-wrap">
-          <ModeToggle />
-          <Button asChild variant="outline" size="icon" className="hover:scale-105 transition-transform" title="Visit ybtheflash.in">
-            <a href="https://ybtheflash.in" target="_blank" rel="noopener noreferrer" aria-label="ybtheflash.in">
-              {/* simple globe icon */}
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M2 12h20" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z" />
-              </svg>
-            </a>
-          </Button>
-          <IWasHereWidget />
-          <PolicyDialog />
+  <Separator className="my-1 bg-muted" />
+        {/* Bottom section: New layout for all views */}
+        <div className="space-y-5">
+          {/* Top row: Spotify player centered */}
+          <div className="flex justify-center w-full">
+            <NowPlaying />
+          </div>
+          
+          {/* Bottom row: 3 buttons on left, iWasHere on right */}
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <ModeToggle />
+              <Button asChild variant="outline" size="icon" className="hover:scale-105 transition-transform" title="Visit ybtheflash.in">
+                <a href="https://ybtheflash.in" target="_blank" rel="noopener noreferrer" aria-label="ybtheflash.in">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M2 12h20" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z" />
+                  </svg>
+                </a>
+              </Button>
+              <PolicyDialog />
+            </div>
+            <div className="flex items-center">
+              <IWasHereWidget />
+            </div>
+          </div>
         </div>
         </Card>
+      </div>
       </div>
       <style jsx global>{`
         .animate-pulse-on-hover:hover {
@@ -173,6 +189,6 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
           100% { box-shadow: 0 0 0 0 var(--tw-shadow-color, #888); }
         }
       `}</style>
-    </main>
+  </main>
   );
 }

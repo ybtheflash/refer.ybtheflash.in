@@ -15,7 +15,7 @@ export default function ValorantPopup() {
   if (!show) return null;
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-4 rounded-md border border-muted bg-muted/40 text-foreground px-4 py-3 shadow-sm">
+    <div className="relative z-20 w-full max-w-2xl mx-auto mb-4 rounded-md border border-muted bg-card text-foreground px-4 py-3 shadow-sm">
       {!thanks ? (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm">
