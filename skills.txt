@@ -27,3 +27,5 @@ Rest Assured
 Jenkins
 CI/CD
 Docker
+MS Excel
+Manual Testing

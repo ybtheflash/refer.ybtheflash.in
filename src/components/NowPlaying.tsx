@@ -4,14 +4,14 @@ import React from "react";
 type Data =
   | { ok: true; isPlaying: false }
   | {
-      ok: true;
-      isPlaying: true;
-      title: string;
-      artist: string;
-      album?: string;
-      albumImageUrl?: string;
-      songUrl?: string;
-    };
+    ok: true;
+    isPlaying: true;
+    title: string;
+    artist: string;
+    album?: string;
+    albumImageUrl?: string;
+    songUrl?: string;
+  };
 
 export default function NowPlaying() {
   const [data, setData] = React.useState<Data | null>(null);
@@ -23,7 +23,7 @@ export default function NowPlaying() {
         const res = await fetch("/api/spotify/now-playing", { cache: "no-store" });
         const json = (await res.json()) as Data;
         setData(json);
-      } catch {}
+      } catch { }
       timer = setTimeout(load, 20_000);
     };
     load();
@@ -35,71 +35,76 @@ export default function NowPlaying() {
   return (
     <div className="relative flex items-center justify-center w-full">
       {data.ok && data.isPlaying ? (
-        <div className="relative flex items-center justify-center">
-          {/* Left wave - flows FROM widget TO left card border */}
-          <div className="absolute right-full mr-1 sm:mr-4 flex items-center overflow-hidden max-w-[12vw] sm:max-w-[150px]">
-            <svg width="100%" height="20" viewBox="0 0 150 20" className="min-w-[60px] sm:min-w-[120px]">
-              <defs>
-                <linearGradient id="fadeLeft" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" style={{stopColor:"#4ade80", stopOpacity:0.1}} />
-                  <stop offset="30%" style={{stopColor:"#4ade80", stopOpacity:0.4}} />
-                  <stop offset="70%" style={{stopColor:"#4ade80", stopOpacity:0.7}} />
-                  <stop offset="100%" style={{stopColor:"#4ade80", stopOpacity:0.9}} />
-                </linearGradient>
-              </defs>
-              <path
-                d="M150,10 Q140,5 130,10 T110,10 T90,10 T70,10 T50,10 T30,10 T10,10 T0,10"
-                stroke="url(#fadeLeft)"
-                strokeWidth="2"
-                fill="none"
-                className="wave-left"
-              />
-            </svg>
-          </div>
-
-          {/* Main player content - no border */}
-          <div className="flex items-center gap-3 bg-card/80 backdrop-blur px-3 py-2 text-sm rounded-md">
-            {data.albumImageUrl ? (
-              <img
-                src={`/api/spotify/image-proxy?url=${encodeURIComponent(data.albumImageUrl)}`}
-                alt="Album"
-                className="h-8 w-8 rounded object-cover"
-                loading="lazy"
-              />
-            ) : null}
-            <div className="min-w-0">
-              <div className="truncate font-medium">
-                {data.songUrl ? (
-                  <a href={data.songUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                    {data.title}
-                  </a>
-                ) : (
-                  data.title
-                )}
-              </div>
-              <div className="truncate text-xs text-muted-foreground">{data.artist}</div>
+        <div className="flex flex-col items-center">
+          <span className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 font-semibold">
+            Now Listening to
+          </span>
+          <div className="relative flex items-center justify-center">
+            {/* Left wave - flows FROM widget TO left card border */}
+            <div className="absolute right-full mr-1 sm:mr-4 flex items-center overflow-hidden max-w-[12vw] sm:max-w-[150px]">
+              <svg width="100%" height="20" viewBox="0 0 150 20" className="min-w-[60px] sm:min-w-[120px]">
+                <defs>
+                  <linearGradient id="fadeLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style={{ stopColor: "#4ade80", stopOpacity: 0.1 }} />
+                    <stop offset="30%" style={{ stopColor: "#4ade80", stopOpacity: 0.4 }} />
+                    <stop offset="70%" style={{ stopColor: "#4ade80", stopOpacity: 0.7 }} />
+                    <stop offset="100%" style={{ stopColor: "#4ade80", stopOpacity: 0.9 }} />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M150,10 Q140,5 130,10 T110,10 T90,10 T70,10 T50,10 T30,10 T10,10 T0,10"
+                  stroke="url(#fadeLeft)"
+                  strokeWidth="2"
+                  fill="none"
+                  className="wave-left"
+                />
+              </svg>
             </div>
-          </div>
 
-          {/* Right wave - flows FROM widget TO right card border */}
-          <div className="absolute left-full ml-1 sm:ml-4 flex items-center overflow-hidden max-w-[12vw] sm:max-w-[150px]">
-            <svg width="100%" height="20" viewBox="0 0 150 20" className="min-w-[60px] sm:min-w-[120px]">
-              <defs>
-                <linearGradient id="fadeRight" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" style={{stopColor:"#4ade80", stopOpacity:0.9}} />
-                  <stop offset="30%" style={{stopColor:"#4ade80", stopOpacity:0.7}} />
-                  <stop offset="70%" style={{stopColor:"#4ade80", stopOpacity:0.4}} />
-                  <stop offset="100%" style={{stopColor:"#4ade80", stopOpacity:0.1}} />
-                </linearGradient>
-              </defs>
-              <path
-                d="M0,10 Q10,15 20,10 T40,10 T60,10 T80,10 T100,10 T120,10 T140,10 T150,10"
-                stroke="url(#fadeRight)"
-                strokeWidth="2"
-                fill="none"
-                className="wave-right"
-              />
-            </svg>
+            {/* Main player content - no border */}
+            <div className="flex items-center gap-3 bg-card/80 backdrop-blur px-4 py-2 text-sm rounded-md shadow-sm">
+              {data.albumImageUrl ? (
+                <img
+                  src={`/api/spotify/image-proxy?url=${encodeURIComponent(data.albumImageUrl)}`}
+                  alt="Album"
+                  className="h-8 w-8 rounded object-cover shadow-sm"
+                  loading="lazy"
+                />
+              ) : null}
+              <div className="min-w-0">
+                <div className="truncate font-medium">
+                  {data.songUrl ? (
+                    <a href={data.songUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                      {data.title}
+                    </a>
+                  ) : (
+                    data.title
+                  )}
+                </div>
+                <div className="truncate text-xs text-muted-foreground">{data.artist}</div>
+              </div>
+            </div>
+
+            {/* Right wave - flows FROM widget TO right card border */}
+            <div className="absolute left-full ml-1 sm:ml-4 flex items-center overflow-hidden max-w-[12vw] sm:max-w-[150px]">
+              <svg width="100%" height="20" viewBox="0 0 150 20" className="min-w-[60px] sm:min-w-[120px]">
+                <defs>
+                  <linearGradient id="fadeRight" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style={{ stopColor: "#4ade80", stopOpacity: 0.9 }} />
+                    <stop offset="30%" style={{ stopColor: "#4ade80", stopOpacity: 0.7 }} />
+                    <stop offset="70%" style={{ stopColor: "#4ade80", stopOpacity: 0.4 }} />
+                    <stop offset="100%" style={{ stopColor: "#4ade80", stopOpacity: 0.1 }} />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M0,10 Q10,15 20,10 T40,10 T60,10 T80,10 T100,10 T120,10 T140,10 T150,10"
+                  stroke="url(#fadeRight)"
+                  strokeWidth="2"
+                  fill="none"
+                  className="wave-right"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       ) : (
@@ -110,9 +115,10 @@ export default function NowPlaying() {
             className="h-6 w-6 object-contain opacity-60 invert-0 dark:invert"
             loading="lazy"
           />
-          <span className="text-sm">No Music Playing - Spotify</span>
+          <span className="text-sm font-medium">Not Listening to Spotify Right Now</span>
         </div>
-      )}
+      )
+      }
 
       <style jsx>{`
         .wave-left {
@@ -169,6 +175,6 @@ export default function NowPlaying() {
           100% { filter: hue-rotate(360deg); }
         }
       `}</style>
-    </div>
+    </div >
   );
 }
