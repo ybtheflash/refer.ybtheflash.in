@@ -6,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import ValorantPopup from "@/components/ValorantPopup";
-import { FaEnvelope, FaWhatsapp, FaGithub, FaLinkedin, FaYoutube, FaHandshake } from "react-icons/fa";
+import { FaEnvelope, FaWhatsapp, FaGithub, FaLinkedin, FaYoutube, FaHandshake, FaTimes } from "react-icons/fa";
 import { FaDiscord, FaXTwitter } from "react-icons/fa6";
+import { useState, useEffect } from "react";
 
 import { ModeToggle } from "./ModeToggle";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
@@ -17,6 +18,19 @@ import NowPlaying from "@/components/NowPlaying";
 import PolicyDialog from "@/components/PolicyDialog";
 
 export default function ReferralPage({ skills }: { skills: string[] }) {
+  const [isPhotoExpanded, setIsPhotoExpanded] = useState(false);
+
+  useEffect(() => {
+    if (isPhotoExpanded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isPhotoExpanded]);
+
   // Compute age from birthdate: June 28, 2002
   const birthDate = new Date(2002, 5, 28); // JS months are 0-based; 5 = June
   const today = new Date();
@@ -50,9 +64,15 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
           <Card className="w-full p-6 sm:p-8 border border-muted shadow-lg bg-card">
             {/* Hero */}
             <div className="flex items-center gap-4 sm:gap-6 mb-3 sm:mb-4 w-full">
-              <Avatar className="border border-muted shadow-sm w-16 h-16 sm:w-20 sm:h-20 overflow-hidden">
-                <img src="/me.jpg" alt="Yubaraj Biswas" className="object-cover w-full h-full" />
-              </Avatar>
+              <button
+                className="cursor-pointer hover:scale-105 active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full shrink-0"
+                onClick={() => setIsPhotoExpanded(true)}
+                aria-label="Expand photo"
+              >
+                <Avatar className="border border-muted shadow-sm w-[4.5rem] h-[4.5rem] sm:w-[5.5rem] sm:h-[5.5rem] overflow-hidden pointer-events-none">
+                  <img src="/me.jpg" alt="Yubaraj Biswas" className="object-cover w-full h-full" />
+                </Avatar>
+              </button>
               <div className="flex-1">
                 <p className="text-sm sm:text-base text-muted-foreground">
                   Looking for <span className="font-semibold text-primary">SDE I</span> or <span className="font-semibold text-primary">QEA</span> role — entry level.
@@ -233,7 +253,48 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
           </Card>
         </div>
       </div>
+
+      {/* Photo Modal */}
+      {isPhotoExpanded && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-modal-fade"
+          onClick={() => setIsPhotoExpanded(false)}
+        >
+          <div className="relative animate-zoom-in max-w-[95vw] max-h-[95vh] sm:max-w-[90vw] sm:max-h-[90vh]">
+            <button
+              className="absolute -top-12 right-0 sm:-right-12 sm:-top-0 text-white/70 hover:text-white p-2 transition-colors cursor-pointer z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPhotoExpanded(false);
+              }}
+              aria-label="Close"
+            >
+              <FaTimes className="w-8 h-8 sm:w-10 sm:h-10 drop-shadow-md" />
+            </button>
+            <img
+              src="/me.jpg"
+              alt="Yubaraj Biswas"
+              className="object-contain max-w-full max-h-[85vh] sm:max-h-[90vh] rounded-lg shadow-2xl pointer-events-none select-none"
+            />
+          </div>
+        </div>
+      )}
+
       <style jsx global>{`
+        @keyframes modalFade {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-modal-fade {
+          animation: modalFade 0.2s ease-out forwards;
+        }
+        .animate-zoom-in {
+          animation: zoomIn 0.2s ease-out forwards;
+        }
         .animate-pulse-on-hover:hover {
           animation: pulse 0.5s;
         }
