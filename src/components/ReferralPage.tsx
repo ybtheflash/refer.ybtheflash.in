@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import ValorantPopup from "@/components/ValorantPopup";
-import { FaEnvelope, FaWhatsapp, FaGithub, FaLinkedin, FaYoutube, FaHandshake, FaTimes } from "react-icons/fa";
+import { FaEnvelope, FaGithub, FaLinkedin, FaYoutube, FaHandshake, FaTimes } from "react-icons/fa";
 import { FaDiscord, FaXTwitter } from "react-icons/fa6";
 import { useState, useEffect } from "react";
 
@@ -192,10 +192,6 @@ export default function ReferralPage({ skills }: { skills: string[] }) {
                   <span className="truncate">yubarajbiswas34@gmail.com</span>
                 </a>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-                  <a href="https://wa.me/+919883289005" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-base font-medium hover:text-green-500 transition-colors group">
-                    <FaWhatsapp className="text-xl group-hover:scale-110 group-hover:text-green-500 transition-transform shrink-0" />
-                    <span className="truncate">WhatsApp</span>
-                  </a>
                   <a href="https://www.linkedin.com/in/yubarajbiswas" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-base font-medium hover:text-blue-600 transition-colors group">
                     <FaLinkedin className="text-xl group-hover:scale-110 group-hover:text-blue-600 transition-transform shrink-0" />
                     <span className="truncate">LinkedIn</span>
